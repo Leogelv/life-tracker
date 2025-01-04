@@ -24,6 +24,12 @@ interface Conclusions {
   nextSteps?: string[]
 }
 
+interface Participants {
+  roles?: string[]
+  interests?: string[]
+  communicationStyle?: string[]
+}
+
 interface Analysis {
   topics: string[]
   context?: Context
@@ -33,6 +39,7 @@ interface Analysis {
   conclusions?: Conclusions
   businessAnalysis?: BusinessAnalysis
   psychologicalAspects?: PsychologicalAspects
+  participants?: Participants
 }
 
 interface Props {
@@ -275,43 +282,77 @@ export function AnalysisCard({ analysis }: Props) {
         </div>
       )}
 
-      {/* Выводы */}
-      {analysis.conclusions && (
+      {/* Участники */}
+      {analysis.participants && (
         <div className="bg-gray-800/40 backdrop-blur-xl rounded-xl p-6 border border-gray-700/50
           hover:shadow-[0_0_15px_rgba(99,102,241,0.1)] transition-all duration-300">
-          <h3 className="text-xl font-semibold text-white mb-4">План действий</h3>
+          <h3 className="text-xl font-semibold text-white mb-4">Участники</h3>
           <div className="space-y-4">
-            {hasNextSteps && (
+            {analysis.participants.roles?.length > 0 && (
               <div>
-                <h4 className="text-gray-400 mb-2">Следующие шаги</h4>
-                <div className="space-y-3">
-                  {analysis.conclusions.nextSteps!.map((step, i) => (
-                    <div key={i} className="flex items-start gap-3 p-3 rounded-lg
-                      bg-gradient-to-r from-pink-500/10 to-rose-500/10
-                      border border-pink-500/20">
-                      <span className="flex items-center justify-center w-5 h-5 rounded-full 
-                        bg-pink-500/20 border border-pink-500/30 text-pink-300 text-xs">
-                        {i + 1}
-                      </span>
-                      <span className="text-gray-200">{step}</span>
+                <h4 className="text-gray-400 mb-2">Роли</h4>
+                <div className="space-y-2">
+                  {analysis.participants.roles.map((role, i) => (
+                    <div key={i} className="flex items-center gap-3 p-2 rounded-lg
+                      bg-gradient-to-r from-blue-500/10 to-indigo-500/10 
+                      border border-blue-500/20">
+                      <span className="w-2 h-2 rounded-full bg-blue-500"></span>
+                      <span className="text-gray-200">{role}</span>
                     </div>
                   ))}
                 </div>
               </div>
             )}
+            
+            {analysis.participants.interests?.length > 0 && (
+              <div>
+                <h4 className="text-gray-400 mb-2">Интересы</h4>
+                <div className="flex flex-wrap gap-2">
+                  {analysis.participants.interests.map((interest, i) => (
+                    <span key={i} className="px-3 py-1 rounded-lg text-sm
+                      bg-purple-500/10 border border-purple-500/20 text-purple-300">
+                      {interest}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            )}
 
+            {analysis.participants.communicationStyle?.length > 0 && (
+              <div>
+                <h4 className="text-gray-400 mb-2">Стиль общения</h4>
+                <div className="space-y-2">
+                  {analysis.participants.communicationStyle.map((style, i) => (
+                    <div key={i} className="flex items-center gap-3 p-2 rounded-lg
+                      bg-gradient-to-r from-violet-500/10 to-purple-500/10 
+                      border border-violet-500/20">
+                      <span className="w-2 h-2 rounded-full bg-violet-500"></span>
+                      <span className="text-gray-200">{style}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* Выводы */}
+      {analysis.conclusions && (hasNextSteps || hasAchievements || hasPending) && (
+        <div className="bg-gray-800/40 backdrop-blur-xl rounded-xl p-6 border border-gray-700/50
+          hover:shadow-[0_0_15px_rgba(99,102,241,0.1)] transition-all duration-300">
+          <h3 className="text-xl font-semibold text-white mb-4">Выводы</h3>
+          <div className="space-y-4">
             {hasAchievements && (
               <div>
-                <h4 className="text-gray-400 mb-2">Достигнуто</h4>
+                <h4 className="text-gray-400 mb-2">Достигнутые результаты</h4>
                 <div className="space-y-2">
                   {analysis.conclusions.achieved!.map((achievement, i) => (
                     <div key={i} className="flex items-center gap-3 p-2 rounded-lg
                       bg-gradient-to-r from-green-500/10 to-emerald-500/10 
                       border border-green-500/20">
-                      <svg className="w-5 h-5 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                      </svg>
-                      <span className="text-green-200">{achievement}</span>
+                      <span className="w-2 h-2 rounded-full bg-green-500"></span>
+                      <span className="text-gray-200">{achievement}</span>
                     </div>
                   ))}
                 </div>
@@ -320,17 +361,30 @@ export function AnalysisCard({ analysis }: Props) {
 
             {hasPending && (
               <div>
-                <h4 className="text-gray-400 mb-2">В процессе</h4>
+                <h4 className="text-gray-400 mb-2">Нерешенные вопросы</h4>
                 <div className="space-y-2">
-                  {analysis.conclusions.pending!.map((item, i) => (
+                  {analysis.conclusions.pending!.map((pending, i) => (
                     <div key={i} className="flex items-center gap-3 p-2 rounded-lg
                       bg-gradient-to-r from-yellow-500/10 to-amber-500/10 
                       border border-yellow-500/20">
-                      <svg className="w-5 h-5 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} 
-                          d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                      </svg>
-                      <span className="text-yellow-200">{item}</span>
+                      <span className="w-2 h-2 rounded-full bg-yellow-500"></span>
+                      <span className="text-gray-200">{pending}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {hasNextSteps && (
+              <div>
+                <h4 className="text-gray-400 mb-2">Следующие шаги</h4>
+                <div className="space-y-2">
+                  {analysis.conclusions.nextSteps!.map((step, i) => (
+                    <div key={i} className="flex items-center gap-3 p-2 rounded-lg
+                      bg-gradient-to-r from-pink-500/10 to-rose-500/10 
+                      border border-pink-500/20">
+                      <span className="w-2 h-2 rounded-full bg-pink-500"></span>
+                      <span className="text-gray-200">{step}</span>
                     </div>
                   ))}
                 </div>

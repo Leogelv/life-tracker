@@ -4,6 +4,9 @@ import { useEffect, useState } from 'react'
 import { createClient } from '@/utils/supabase/client'
 import { Contact } from '@/types/contacts'
 import { useRouter } from 'next/navigation'
+import { AnalysisCard } from '@/app/components/analysis/AnalysisCard'
+import { MessageHistory } from '@/app/components/analysis/MessageHistory'
+import { ParticipantInfo } from '@/app/components/analysis/ParticipantInfo'
 
 export default function ContactPage({ params }: { params: { id: string } }) {
   const [contact, setContact] = useState<Contact | null>(null)
@@ -160,154 +163,7 @@ export default function ContactPage({ params }: { params: { id: string } }) {
           </div>
 
           {contact.summary ? (
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-              {/* Основная информация */}
-              <div className="lg:col-span-2">
-                <div className="bg-gray-800/40 backdrop-blur-xl rounded-xl p-6 border border-gray-700/50
-                  hover:shadow-[0_0_15px_rgba(99,102,241,0.1)] transition-all duration-300">
-                  <h3 className="text-xl font-semibold text-white mb-4">Краткое содержание</h3>
-                  <p className="text-gray-300 leading-relaxed">{contact.summary.summary}</p>
-                  
-                  {contact.summary.topics?.length > 0 && (
-                    <div className="mt-6">
-                      <h4 className="text-gray-400 mb-3">Обсуждаемые темы:</h4>
-                      <div className="flex flex-wrap gap-2">
-                        {contact.summary.topics.map((topic, i) => (
-                          <span 
-                            key={i}
-                            className="px-4 py-1.5 rounded-full text-sm font-medium
-                              bg-gradient-to-r from-indigo-500/10 to-purple-500/10 
-                              border border-indigo-500/20 text-indigo-300
-                              hover:border-indigo-500/30 hover:from-indigo-500/20 hover:to-purple-500/20
-                              transition-all duration-300"
-                          >
-                            {topic}
-                          </span>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-                </div>
-              </div>
-
-              {/* Участники */}
-              <div>
-                <div className="bg-gray-800/40 backdrop-blur-xl rounded-xl p-6 border border-gray-700/50
-                  hover:shadow-[0_0_15px_rgba(99,102,241,0.1)] transition-all duration-300">
-                  <h3 className="text-xl font-semibold text-white mb-4">Участники</h3>
-                  {contact.summary.participants && (
-                    <div className="space-y-4">
-                      {contact.summary.participants.roles?.length > 0 && (
-                        <div>
-                          <h4 className="text-gray-400 mb-2">Роли</h4>
-                          <div className="space-y-2">
-                            {contact.summary.participants.roles.map((role, i) => (
-                              <div key={i} 
-                                className="flex items-center gap-3 p-2 rounded-lg bg-gray-700/30
-                                  border border-gray-600/30">
-                                <span className="w-2 h-2 rounded-full bg-indigo-500"></span>
-                                <span className="text-gray-200">{role}</span>
-                              </div>
-                            ))}
-                          </div>
-                        </div>
-                      )}
-                      
-                      {contact.summary.participants.interests?.length > 0 && (
-                        <div>
-                          <h4 className="text-gray-400 mb-2">Интересы</h4>
-                          <div className="flex flex-wrap gap-2">
-                            {contact.summary.participants.interests.map((interest, i) => (
-                              <span key={i}
-                                className="px-3 py-1 rounded-lg text-sm
-                                  bg-purple-500/10 border border-purple-500/20 text-purple-300">
-                                {interest}
-                              </span>
-                            ))}
-                          </div>
-                        </div>
-                      )}
-                    </div>
-                  )}
-                </div>
-              </div>
-
-              {/* Психологические аспекты */}
-              <div className="bg-gray-800/40 backdrop-blur-xl rounded-xl p-6 border border-gray-700/50
-                hover:shadow-[0_0_15px_rgba(99,102,241,0.1)] transition-all duration-300">
-                <h3 className="text-xl font-semibold text-white mb-4">Психологический профиль</h3>
-                {contact.summary.psychologicalAspects && (
-                  <div className="space-y-4">
-                    {contact.summary.psychologicalAspects.values?.length > 0 && (
-                      <div>
-                        <h4 className="text-gray-400 mb-2">Ценности</h4>
-                        <div className="space-y-2">
-                          {contact.summary.psychologicalAspects.values.map((value, i) => (
-                            <div key={i} className="flex items-center gap-3">
-                              <span className="w-1.5 h-1.5 rounded-full bg-gradient-to-r from-indigo-500 to-purple-500"></span>
-                              <span className="text-gray-200">{value}</span>
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                )}
-              </div>
-
-              {/* Бизнес-анализ */}
-              <div className="bg-gray-800/40 backdrop-blur-xl rounded-xl p-6 border border-gray-700/50
-                hover:shadow-[0_0_15px_rgba(99,102,241,0.1)] transition-all duration-300">
-                <h3 className="text-xl font-semibold text-white mb-4">Бизнес-анализ</h3>
-                {contact.summary.businessAnalysis && (
-                  <div className="space-y-4">
-                    {contact.summary.businessAnalysis.strengths?.length > 0 && (
-                      <div>
-                        <h4 className="text-gray-400 mb-2">Сильные стороны</h4>
-                        <div className="space-y-2">
-                          {contact.summary.businessAnalysis.strengths.map((strength, i) => (
-                            <div key={i} className="flex items-center gap-3 p-2 rounded-lg
-                              bg-gradient-to-r from-emerald-500/10 to-teal-500/10 
-                              border border-emerald-500/20">
-                              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
-                              <span className="text-emerald-200">{strength}</span>
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                )}
-              </div>
-
-              {/* Выводы */}
-              <div className="bg-gray-800/40 backdrop-blur-xl rounded-xl p-6 border border-gray-700/50
-                hover:shadow-[0_0_15px_rgba(99,102,241,0.1)] transition-all duration-300">
-                <h3 className="text-xl font-semibold text-white mb-4">План действий</h3>
-                {contact.summary.conclusions && (
-                  <div className="space-y-4">
-                    {contact.summary.conclusions.nextSteps?.length > 0 && (
-                      <div>
-                        <h4 className="text-gray-400 mb-2">Следующие шаги</h4>
-                        <div className="space-y-3">
-                          {contact.summary.conclusions.nextSteps.map((step, i) => (
-                            <div key={i} className="flex items-start gap-3 p-3 rounded-lg
-                              bg-gradient-to-r from-pink-500/10 to-rose-500/10
-                              border border-pink-500/20">
-                              <span className="flex items-center justify-center w-5 h-5 rounded-full 
-                                bg-pink-500/20 border border-pink-500/30 text-pink-300 text-xs">
-                                {i + 1}
-                              </span>
-                              <span className="text-gray-200">{step}</span>
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                )}
-              </div>
-            </div>
+            <AnalysisCard analysis={contact.summary} />
           ) : (
             <div className="bg-gray-800/40 backdrop-blur-xl rounded-xl p-8 border border-gray-700/50 text-center">
               <div className="inline-flex items-center justify-center w-16 h-16 rounded-full 
@@ -330,32 +186,7 @@ export default function ContactPage({ params }: { params: { id: string } }) {
           
           <div className="bg-gray-800/40 backdrop-blur-xl rounded-xl p-6 border border-gray-700/50">
             {contact.history?.raw?.messages ? (
-              <div className="space-y-4 max-h-[600px] overflow-y-auto pr-4 
-                scrollbar-thin scrollbar-thumb-indigo-500/30 scrollbar-track-gray-800/30">
-                {contact.history.raw.messages.map((msg, i) => (
-                  <div 
-                    key={i}
-                    className={`flex ${msg.from_user ? 'justify-end' : 'justify-start'}`}
-                  >
-                    <div className={`relative group max-w-[60%] ${msg.from_user ? 'ml-12' : 'mr-12'}`}>
-                      {/* Время сообщения (появляется при наведении) */}
-                      <div className={`absolute top-0 ${msg.from_user ? 'right-full mr-2' : 'left-full ml-2'}
-                        opacity-0 group-hover:opacity-100 transition-opacity duration-200
-                        text-xs text-gray-500 whitespace-nowrap pt-2`}>
-                        {new Date(msg.date).toLocaleString()}
-                      </div>
-                      
-                      <div className={`p-4 rounded-2xl backdrop-blur-sm
-                        ${msg.from_user 
-                          ? 'bg-gradient-to-r from-indigo-500/20 to-purple-500/20 border border-indigo-500/30 rounded-tr-sm' 
-                          : 'bg-gradient-to-r from-gray-700/30 to-gray-600/30 border border-gray-600/30 rounded-tl-sm'
-                        }`}>
-                        <p className="text-gray-200 break-words">{msg.text}</p>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
+              <MessageHistory messages={contact.history.raw.messages} />
             ) : (
               <div className="text-center py-8">
                 <div className="inline-flex items-center justify-center w-16 h-16 rounded-full 
