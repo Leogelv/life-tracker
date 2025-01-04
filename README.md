@@ -1,36 +1,72 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Life Tracker
 
-## Getting Started
+Приложение для отслеживания задач, контактов и других аспектов жизни.
 
-First, run the development server:
+## Структура проекта
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+```
+src/
+├── app/                      # Next.js app директория
+│   ├── components/           # React компоненты
+│   │   ├── ContactList.tsx   # Список контактов с анализом истории
+│   │   ├── DatabaseInfo.tsx  # Информация о БД
+│   │   ├── TableViewer.tsx   # Просмотр данных таблицы
+│   │   └── TodoList.tsx      # Список задач
+│   ├── contacts/             # Страница контактов
+│   │   └── page.tsx
+│   ├── utils/               # Утилиты
+│   │   └── supabase/        # Конфигурация Supabase
+│   ├── globals.css          # Глобальные стили
+│   ├── layout.tsx           # Корневой layout
+│   └── page.tsx             # Главная страница
+├── cli/                     # CLI утилиты
+│   └── supabase-manager.ts  # Управление базой данных
+└── migrations/              # SQL миграции
+    └── create_contacts_table.sql
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Функциональность
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Dashboard
+- Просмотр всех активных задач и привычек
+- Быстрые действия (создание привычек, заметок, просмотр контактов)
+- Интеграция с Telegram ботом
+- Просмотр статистики базы данных
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### Контакты
+- Просмотр списка контактов из Telegram
+- Анализ истории переписки с помощью DeepSeek AI
+- Сохранение результатов анализа в базе данных
 
-## Learn More
+### CLI Утилита
+```bash
+# Показать все таблицы и количество записей
+npm run db list-tables
 
-To learn more about Next.js, take a look at the following resources:
+# Импортировать контакты из API
+npm run db import-contacts
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Переменные окружения
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Создайте файл `.env.local`:
 
-## Deploy on Vercel
+```env
+NEXT_PUBLIC_SUPABASE_URL=your-supabase-url
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your-supabase-anon-key
+YANDEX_API_KEY=your-yandex-api-key
+NEXT_PUBLIC_DEEPSEEK_API_KEY=your-deepseek-api-key
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Разработка
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```bash
+# Установка зависимостей
+npm install
+
+# Запуск сервера разработки
+npm run dev
+
+# Сборка
+npm run build
+```
