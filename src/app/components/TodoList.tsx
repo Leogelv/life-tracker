@@ -1,7 +1,7 @@
 'use client'
 
 // Импортируем клиент Supabase для работы с базой данных
-import { createClient } from '@utils/supabase/client'
+import { createClient } from '@/utils/supabase/client'
 // Импортируем хуки React для управления состоянием и эффектами
 import { useEffect, useState } from 'react'
 
