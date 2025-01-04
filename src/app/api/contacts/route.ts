@@ -14,8 +14,9 @@ export async function GET(request: Request) {
     const response = await fetch(
       `https://functions.yandexcloud.net/d4em009uqs3tbu0k3ogl?chat_id=${chatId}`,
       {
+        method: 'GET',
         headers: {
-          'Authorization': `Api-Key ${process.env.YANDEX_CLOUD_API_KEY}`,
+          'Authorization': `Api-Key ${process.env.YANDEX_API_KEY}`,
           'Content-Type': 'application/json'
         }
       }
